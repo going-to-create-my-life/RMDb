@@ -1,0 +1,412 @@
+<div class="hero mv-single-hero">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- <h1> movie listing - list</h1>
+				<ul class="breadcumb">
+					<li class="active"><a href="#">Home</a></li>
+					<li> <span class="ion-ios-arrow-right"></span> movie listing</li>
+				</ul> -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page-single movie-single movie_single">
+  <div class="container">
+    <div class="row ipad-width2">
+      <div class="col-md-4 col-sm-12 col-xs-12">
+        <div class="movie-img sticky-sb">
+          <img src="{{img}}" alt="" />
+          <div class="movie-btn">
+            <div class="btn-transform transform-vertical red">
+              <div><a href="#" class="item item-1 redbtn">
+                  <i class="ion-play"></i>
+                  {{ott}}</a></div>
+              <div><a
+                  href="https://www.{{ott}}.com"
+                  class="item item-2 redbtn fancybox-media hvr-grow"
+                ><i class="ion-play"></i></a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8 col-sm-12 col-xs-12">
+        <div class="movie-single-ct main-content">
+          <h1 class="bd-hd">{{name}}
+            <span>{{release}}</span></h1><br />
+          <!-- <div class="social-btn">
+						<a href="#" class="parent-btn"><i class="ion-heart"></i> Add to Favorite</a>
+						<div class="hover-bnt">
+							<a href="#" class="parent-btn"><i class="ion-android-share-alt"></i>share</a>
+							<div class="hvr-item">
+								<a href="#" class="hvr-grow"><i class="ion-social-facebook"></i></a>
+								<a href="#" class="hvr-grow"><i class="ion-social-twitter"></i></a>
+								<a href="#" class="hvr-grow"><i class="ion-social-googleplus"></i></a>
+								<a href="#" class="hvr-grow"><i class="ion-social-youtube"></i></a>
+							</div>
+						</div>		
+					</div> -->
+          {{{trailer}}}
+          <div class="movie-rate">
+            <div class="rate">
+              <i class="ion-android-star"></i>
+              <p><span>{{rating}}</span>
+                /10<br />
+                <span class="rv">IMDb</span>
+              </p>
+            </div>
+            {{#eq ott "Only in Theatures"}}
+            <div class="rate-star">
+              <p>Go and Checkout {{name}} {{ott}}</p>
+            </div>
+          {{/eq}}
+          {{#isnt ott "Only in Theatures"}}
+            <div class="rate-star">
+              <p>Go and Checkout {{name}} in {{ott}}</p>
+            </div>
+          {{/isnt}}
+          </div>
+          <div class="movie-tabs">
+            <div class="tabs">
+              <ul class="tab-links tabs-mv">
+                <li class="active"><a
+                    id="overview"
+                    href="#overview"
+                  >Overview</a></li>
+                <li><a id="reviews" href="#reviews"> Reviews</a></li>
+                <li><a id="cast" href="#cast"> Cast & Crew </a></li>
+                <li><a id="media" href="#media"> Media</a></li>
+              </ul>
+              <div class="tab-content">
+                <div id="overview" class="tab active">
+                  <div class="row">
+                    <div class="col-md-8 col-sm-12 col-xs-12">
+                      <p>{{overview}}</p><br />
+                      <div class="title-hd-sm">
+                        <h4>Videos & Photos</h4>
+                        <a href="#media" class="time me">
+                          All Videos & Photos
+                          <i class="ion-ios-arrow-right"></i></a>
+                      </div>
+                      <div class="mvsingle-item ov-item">
+                        {{#each photos}}
+                          {{#gte "2" @key}}
+                            <a
+                              class="img-lightbox"
+                              data-fancybox-group="gallery"
+                              href="{{Jawanp}}"
+                              style="width: 30%;"
+                            ><img src="{{Jawanp}}" alt="" /></a>
+                          {{/gte}}
+                        {{/each}}
+                        {{#each videos}}
+                          {{#gte "0" @key}}
+                            <div class="vd-it">
+                              <img
+                                class="vd-img"
+                                src="images/uploads/image4.jpg"
+                                alt=""
+                              />
+                              <a
+                                class="fancybox-media hvr-grow"
+                                href="{{Jawanv}}"
+                              ><img
+                                  src="images/uploads/play-vd.png"
+                                  alt=""
+                                /></a>
+                            </div>
+                          {{/gte}}
+                        {{/each}}
+                      </div>
+                      <div class="title-hd-sm">
+                        <h4>cast</h4>
+                        <a href="#cast" class="time me">Full Cast & Crew
+                          <i class="ion-ios-arrow-right"></i></a>
+                      </div>
+                      <!-- movie cast -->
+                      <div class="mvcast-item">
+                        {{#each crew}}
+                          {{#eq role "cast"}}
+                            <div class="cast-it">
+                              <div class="cast-left">
+                                <img src="{{img}}" alt="" />
+                                <a href="#">{{name}}</a>
+                              </div>
+                              <p>{{work}}</p>
+                            </div>
+                          {{/eq}}
+                        {{/each}}
+                      </div>
+                      <div class="title-hd-sm">
+                        <h4>User reviews</h4>
+                        <a href="#reviews" class="time me">See All 56 Reviews
+                          <i class="ion-ios-arrow-right"></i></a>
+                      </div>
+                      <!-- movie user review -->
+                      {{#each review}}
+                        {{#eq 0 @key}}
+                          <div class="mv-user-review-item">
+                            <div class="user-infor">
+                              <img src="{{img}}" alt="" />
+                              <div>
+                                <h3>{{title}}</h3>
+                                <div class="no-star">
+                                  <i class="ion-android-star"></i>
+                                  {{star}}/10
+                                </div>
+                                <p class="time">
+                                  {{date}}
+                                  by
+                                  {{name}}
+                                </p>
+                              </div>
+                            </div>
+                            <p>{{content}}</p>
+                          </div>
+                        {{/eq}}
+                      {{/each}}
+                    </div>
+                    <div class="col-md-4 col-xs-12 col-sm-12">
+                      <div class="sb-it">
+                        <h6>Director: </h6>
+                        <p><a
+                            href="/celebrities?{{director}}"
+                          >{{director}}</a></p>
+                      </div>
+                      <div class="sb-it">
+                        <h6>Writer: </h6>
+                        <p>{{writer}}</p>
+                      </div>
+                      <div class="sb-it">
+                        <h6>Stars: </h6>
+                        <p>{{stars}}</p>
+                      </div>
+                      <div class="sb-it">
+                        <h6>Genres:</h6>
+                        <p>{{genres}}</p>
+                      </div>
+                      <div class="sb-it">
+                        <h6>Release Date:</h6>
+                        <p>{{release}}</p>
+                      </div>
+                      <div class="sb-it">
+                        <h6>Run Time:</h6>
+                        <p>{{time}}</p>
+                      </div>
+                      <div class="sb-it">
+                        <h6>IMDb Rating:</h6>
+                        <p>{{rating}}/10</p>
+                      </div>
+                      {{! <div class="sb-it">
+                        <h6>Plot Keywords:</h6>
+                        <p class="tags">
+                          <span class="time"><a href="#">superhero</a></span>
+                          <span class="time"><a href="#">marvel universe</a></span>
+                          <span class="time"><a href="#">comic</a></span>
+                          <span class="time"><a href="#">blockbuster</a></span>
+                          <span class="time"><a href="#">final battle</a></span>
+                        </p>
+                      </div> }}
+                      <div class="ads">
+                        <img src="images/uploads/ads1.png" alt="" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="reviews" class="tab review">
+                  <div class="row">
+                    <div class="rv-hd">
+                      <div class="div">
+                        <h3>Reviews On</h3>
+                        <h2>{{name}}</h2>
+                        {{! </div>
+                      <a href="#" class="redbtn">Write Review</a>
+                    </div> }}
+                        <div class="topbar-filter">
+                          <p>You are on Page number {{page}}</p>
+                          {{!-- <label>Filter by:</label>
+                          <select>
+                            <option value="popularity">Popularity Descending</option>
+                            <option value="popularity">Popularity Ascending</option>
+                            <option value="rating">Rating Descending</option>
+                            <option value="rating">Rating Ascending</option>
+                            <option value="date">Release date Descending</option>
+                            <option value="date">Release date Ascending</option>
+                          </select> --}}
+                        </div>
+                        {{#each review}}
+                          <div class="mv-user-review-item">
+                            <div class="user-infor">
+                              <img src="{{img}}" alt="" />
+                              <div>
+                                <h3>{{title}}</h3>
+                                <div class="no-star">
+                                  <i class="ion-android-star"></i>
+                                  {{star}}/10
+                                </div>
+                                <p class="time">
+                                  {{date}}
+                                  by
+                                  {{name}}
+                                </p>
+                              </div>
+                            </div>
+                            <p>{{content}}</p>
+                          </div>
+                        {{/each}}
+                        <div class="topbar-filter">
+                          {{!-- <form href="#"> --}}
+                          {{!-- <label for="noofreview">Reviews per page:</label>
+                          <select>
+                            <option name="noofreview" value="3">3 Reviews</option>
+                            <option name="noofreview" value="5">5 Reviews</option>
+                            <option name="noofreview" value="10">10 Reviews</option>
+                            <option name="noofreview" value="20">20 Reviews</option>
+                          </select> --}}
+                            {{!-- <label for="reviewpage">Pages:</label>
+                            <select>
+                            <option name="reviewpage" value="1">Page:1</option>
+                            <option name="reviewpage" value="2">Page:2</option>
+                            <option name="reviewpage" value="3">Page:3</option>
+                            <option name="reviewpage" value="4">Page:4</option>
+                          </select>
+                          <button class="redbtn">Go</button>
+                          </form> --}}
+                          <div class="pagination2" style="padding-left: 0;"><span>Now on page {{page}}</span></div>
+                           <div class="pagination2" style="padding-right: 10px;">
+                             <span>Go on page number:</span>
+                             <a href="movies?movie={{name}}&page={{minus page 1}}"><i class="ion-arrow-left-b"></i></a> 
+                            <a id="page1" href="movies?movie={{name}}&page=1" style="margin: 0;">1</a>
+                            <a id="page2" href="movies?movie={{name}}&page=2" style="margin: 0;">2</a>
+                            <a id="page3" href="movies?movie={{name}}&page=3" style="margin: 0;">3</a>
+                            <a id="page4" href="movies?movie={{name}}&page=4" style="margin: 0;">4</a>
+                            <a id="page5" href="movies?movie={{name}}&page=5" style="margin: 0;">5</a>
+                            <a id="page6" href="movies?movie={{name}}&page=6" style="margin: 0;">6</a> 
+                             <a href="movies?movie={{name}}&page={{add page 1}}"><i class="ion-arrow-right-b"></i></a> 
+                          </div> 
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="cast" class="tab">
+                  <div class="row">
+                    <h3>Cast & Crew of</h3>
+                    <h2>{{name}}</h2>
+                    {{! <div class="title-hd-sm">
+                      <h4>Directors & Credit Writers</h4>
+                    </div>
+                    <div class="mvcast-item">
+                      <div class="cast-it">
+                        <div class="cast-left">
+                          <h4>JW</h4>
+                          <a href="#">Joss Whedon</a>
+                        </div>
+                        <p>... Director</p>
+                      </div>
+                    </div> }}
+                    <!-- //== -->
+                    <div class="title-hd-sm">
+                      <h4>Directors & Credit Writers</h4>
+                    </div>
+                    <div class="mvcast-item">
+                      {{#each crew}}
+                        {{#eq role "director"}}
+                          <div class="cast-it">
+                            <div class="cast-left">
+                              <img src="{{img}}" alt="" />
+                              <a href="#">{{name}}</a>
+                            </div>
+                            <p>{{work}}</p>
+                          </div>
+                        {{/eq}}
+                      {{/each}}
+                    </div>
+                    <!-- //== -->
+                    <div class="title-hd-sm">
+                      <h4>Cast</h4>
+                    </div>
+                    <div class="mvcast-item">
+                      {{#each crew}}
+                        {{#eq role "cast"}}
+                          <div class="cast-it">
+                            <div class="cast-left">
+                              <img src="{{img}}" alt="" />
+                              <a href="#">{{name}}</a>
+                            </div>
+                            <p>{{work}}</p>
+                          </div>
+                        {{/eq}}
+                      {{/each}}
+                    </div>
+                    <!-- //== -->
+                    <div class="title-hd-sm">
+                      <h4>Produced by</h4>
+                    </div>
+                    <div class="mvcast-item">
+                      {{#each crew}}
+                        {{#eq role "producer"}}
+                          <div class="cast-it">
+                            <div class="cast-left">
+                              <img src="{{img}}" alt="" />
+                              <a href="#">{{name}}</a>
+                            </div>
+                            <p>{{work}}</p>
+                          </div>
+                        {{/eq}}
+                      {{/each}}
+                    </div>
+                  </div>
+                </div>
+                <div id="media" class="tab">
+                  <div class="row">
+                    <div class="rv-hd">
+                      <div>
+                        <h3>Videos & Photos of</h3>
+                        <h2>{{name}}</h2>
+                      </div>
+                    </div>
+                    <div class="title-hd-sm">
+                      <h4>Videos</h4>
+                    </div>
+                    <div class="mvsingle-item media-item">
+                      {{#each videos}}
+                        <div class="vd-item">
+                          <div class="vd-it">
+                            <img class="vd-img" src="{{Jawanv}}" alt="" />
+                            <a
+                              class="fancybox-media hvr-grow"
+                              href="{{Jawanv}}"
+                            ><img src="images/uploads/play-vd.png" alt="" /></a>
+                          </div>
+                          {{! <div class="vd-infor">
+                          <h6> <a href="#">Trailer: Watch New Scenes</a></h6>
+                          <p class="time"> 1: 31</p>
+                        </div> }}
+                        </div>
+                      {{/each}}
+                    </div>
+                    <div class="title-hd-sm">
+                      <h4>Photos</h4>
+                    </div>
+                    <div class="mvsingle-item">
+                      {{#each photos}}
+                        <a
+                          class="img-lightbox"
+                          data-fancybox-group="gallery"
+                          href="'{{Jawanp}}'"
+                          style="width: 30%;"
+                        ><img src="{{Jawanp}}" alt="" /></a>
+                      {{/each}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
