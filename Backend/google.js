@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 let sql;
 // connect to db
-const db = new sqlite3.Database("/home/sourav/Documents/RMdb/Backend/index.db", sqlite3.OPEN_READWRITE,(err)=>{
+const db = new sqlite3.Database("/opt/render/project/src/Backend/index.db", sqlite3.OPEN_READWRITE,(err)=>{
     if(err) return console.error(err.message);
 });
 const jwt = require('jsonwebtoken');
@@ -17,7 +17,7 @@ const GOOGLE_CLIENT_SECRET = "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"
 passport.use(new GoogleStrategy({
   clientID: "503045921384-eqtstg92ehku816atthen5ngctn2976h.apps.googleusercontent.com",
   clientSecret: "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",
-  callbackURL: "http://localhost:3000/auth/google/callback",
+  callbackURL: "https://rmdb-y1yl.onrender.com/auth/google/callback",
   passReqToCallback: true,
 },
 
