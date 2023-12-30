@@ -143,11 +143,16 @@
 	    
 	    <!-- top search form -->
 	    <div class="top-search">
-	    	<select>
-				<option value="united">Movies</option>
-				<option value="saab">Celebrities</option>
+			<form method="post" action="/search" style="display: flex; width:100%">
+				<label for="m"></label>
+	    	<select name="m">
+				<option value="movie">Movies</option>
+				<option value="celebrity">Celebrities</option>
 			</select>
-			<input type="text" placeholder="Search for any movie or celebrity that you are looking for">
+			<label for="name"></label>
+			<input  name="name" type="text" placeholder="Search for any movie or celebrity that you are looking for">
+			<input class="submit" type="submit" value="">
+			</form>
 	    </div>
 	</div>
 </header>
