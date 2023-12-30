@@ -11,12 +11,12 @@ $(window).on('load', function() {
 	var vidDefer = document.getElementsByTagName('iframe');
 	$('.tabs #favoritelist').hide()
 	console.log("DONEEEEEEEE");
-	for (var i=0; i<vidDefer.length; i++) {
-		console.log("aaaaa");
-		if(vidDefer[i].getAttribute('data-src')) {
-			vidDefer[i].setAttribute('src',vidDefer[i].getAttribute('data-src'));
-		} 
-	}
+	// for (var i=0; i<vidDefer.length; i++) {
+	// 	console.log("aaaaa");
+	// 	if(vidDefer[i].getAttribute('data-src')) {
+	// 		vidDefer[i].setAttribute('src',vidDefer[i].getAttribute('data-src'));
+	// 	} 
+	// }
 	console.log("333333");
 })
 $(function(){
