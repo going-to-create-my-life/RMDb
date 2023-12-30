@@ -34,7 +34,7 @@ function a(req, accessToken, refreshToken, profile, done) {
             return console.error(err.message);
         }
         else{
-          if(row[0].password == undefined){
+          if(row[0] == undefined || row[0]==''){
                   console.log(row);
                 sql = `INSERT INTO users(username,email,password,pic) VALUES (?,?,?,?)`
                 db.run(sql,[profile.displayName,profile.email,"google",profile.picture],(err)=>{
