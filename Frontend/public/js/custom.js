@@ -7,12 +7,12 @@ $(window).on('load', function() { // makes sure the whole site is loaded
 	preloader.delay(0).fadeOut('fast'); // will fade out the white DIV that covers the website. 
 	body.delay(0).css({'overflow':'visible'});
 	var vidDefer = document.getElementsByTagName('iframe');
+	$('.tabs #favoritelist').hide()
 	for (var i=0; i<vidDefer.length; i++) {
 		if(vidDefer[i].getAttribute('data-src')) {
 			vidDefer[i].setAttribute('src',vidDefer[i].getAttribute('data-src'));
 		} 
 	}
-	$('.tabs #favoritelist').hide()
 })
 $(function(){
 	'use strict';
