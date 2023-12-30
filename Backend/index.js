@@ -59,7 +59,7 @@ function getAllPromise(query, params) {
 
 app.use(cookieParser());
 // connect to db
-const db = new sqlite3.Database("/opt/render/project/src/Backend/index.db", sqlite3.OPEN_READWRITE,(err)=>{
+const db = new sqlite3.Database("/home/sourav/Documents/RMdb/Backend/index.db", sqlite3.OPEN_READWRITE,(err)=>{
     if(err) return console.error(err.message);
 });
 
@@ -143,25 +143,39 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 //form-urlencoded
 
-
-app.get('/',auth, (req, res) => { 
+//rendering start
+app.get('/',auth, async (req, res) => { 
+  let netflix = await getAllPromise(`SELECT * FROM allmovies WHERE ott LIKE '%Net%'`);
+  let prime = await getAllPromise(`SELECT * FROM allmovies WHERE ott LIKE '%Amazon%'`);
+  let hotstar = await getAllPromise(`SELECT * FROM allmovies WHERE ott LIKE '%Hotstar%'`);
+  let theature = await getAllPromise(`SELECT * FROM allmovies WHERE ott LIKE '%Theature%'`);
+  let celebrity = await getAllPromise(`SELECT * FROM allcelebrities`);
+  let movie = await getAllPromise(`SELECT * FROM allmovies`);
   res.render('index',{
     Profile : profile,
-    Logout : logout
+    Logout : logout,
+    netflix: netflix,
+    prime: prime,
+    hotstar: hotstar,
+    theature: theature,
+    celebrity: celebrity,
+    movie: movie
   });
 });
 
 app.all('/moviegrid',auth, async (req, res) => {
   let name = req.body.moviename || '';
+  if(req.query.name != undefined){name = req.query.name};
   let genres = req.body.genres || '';
   let ott = req.body.ott || '';
-  let erro = 'Result for name = '+name+' , genres = '+genres+' , ott = '+ott;
+  let erro = 'Result for name = '+name+' & genres = '+genres+' & ott = '+ott;
   let inputpage = req.query.page || 1;
   let number = req.query.number || 12;
   if(name!= '' || genres!='' || ott!=''){
     number= 100;
   }else{
     erro = '';
+    number==100? number=12:number=number;
   }
   let sort = req.query.sort || 'name';
   let page = ((parseInt(inputpage)-1)*number);
@@ -190,13 +204,14 @@ app.all('/movielist',auth, async (req, res) => {
   let name = req.body.moviename || '';
   let genres = req.body.genres || '';
   let ott = req.body.ott || '';
-  let erro = 'Result for name = '+name+' , genres = '+genres+' , ott = '+ott;
+  let erro = 'Result for name = '+name+' & genres = '+genres+' & ott = '+ott;
   let inputpage = req.query.page || 1;
   let number = req.query.number || 5;
   if(name!= '' || genres!='' || ott!=''){
     number= 100;
   }else{
     erro = '';
+    number==100? number=5:number=number;
   }
   let sort = req.query.sort || 'name';
   let page = ((parseInt(inputpage)-1)*number);
@@ -232,7 +247,6 @@ app.get('/movies',auth, async (req, res) => {
     })
   }
   else{
-    console.log(page);
     let review = await getAllPromise(`SELECT * FROM ${req.query.movie.replaceAll(' ','').replaceAll('-','').replaceAll(':','').replaceAll('.','') + "reviews"} LIMIT ${page},4 `,[]);
     let crew = await getAllPromise(`SELECT * FROM ${req.query.movie.replaceAll(' ','').replaceAll('-','').replaceAll(':','').replaceAll('.','') + "crew"}`,[]);
     let photos = await getAllPromise(`SELECT Jawanp FROM photos`,[]);
@@ -263,18 +277,71 @@ app.get('/movies',auth, async (req, res) => {
   }
 });
 
-app.get('/celebrity',auth, (req, res) => {
-  res.render('celebritygrid',{
-    Profile : profile,
-    Logout : logout
-  })
+app.all('/celebrity',auth, async (req, res) => {
+  let name = req.body.cname || '';
+  if(req.query.name != undefined){name = req.query.name};
+  let profesion = req.body.profesion || '';
+  let erro = 'Result for name = '+name+' & profesion = '+profesion;
+  let inputpage = req.query.page || 1;
+  let number = req.query.number || 9;
+  if(name!= '' || profesion!=''){
+    number= 100;
+  }else{
+    erro = '';
+    number==100? number=9:number=number;
+  }
+  let sort = req.query.sort || 'name';
+  let page = ((parseInt(inputpage)-1)*number);
+  if(page<0){
+    res.render('404',{
+      layout : "extra"
+    })
+  }
+  else{
+    let row = await getAllPromise(`SELECT * FROM allcelebrities WHERE name LIKE '%${name}%' AND profesion LIKE '%${profesion}%' ORDER BY ${sort} LIMIT ${page},${number}`);
+    res.render('celebritygrid',{
+      Profile : profile,
+      Logout : logout,
+      erro: erro,
+      row: row,
+      page : inputpage,
+      number: number,
+      sor: sort,
+      name: name,
+      profesion: profesion
+    });
+  }
 });
 
-app.get('/celebritysingle',auth, (req, res) => {
+app.get('/celebrities',auth,async (req, res) => {
+  if(req.url.replaceAll('/celebrities','').replaceAll('celebrity','').replaceAll('=','').replaceAll('?','').replaceAll('%20','')==''){
+    res.render('404',{
+      layout : "extra"
+    })
+  }
+  else{
+    let row = await getAllPromise('SELECT * FROM allcelebrities WHERE name = ? ',[req.query.celebrity.replaceAll('%20',' ')]);
+    console.log(row, row[0]);
+    if(row[0]==undefined){res.render('404',{
+      layout : "extra"
+    })}
+    else{
+      let main = await getAllPromise(`SELECT * FROM ${req.query.celebrity.replaceAll(' ','').replaceAll('-','').replaceAll(':','').replaceAll('.','')}`,[]);
+  row = row[0];
   res.render('celebritysingle',{
     Profile : profile,
-    Logout : logout
+    Logout : logout,
+    name: row.name,
+    img: row.img,
+    profesion : row.profesion,
+    Country: row.Country,
+    bio: row.bio,
+    dob: row.dob,
+    height: row.height,
+    main: main
   })
+    }
+  }
 });
 
 app.get('/dashboard',authd,(req, res) => { 
@@ -379,40 +446,12 @@ app.post('/updateavatar', upload.single('avatar'), async function (req, res, nex
   return res.redirect('/dashboard');
 });
 
-app.get('/searchmovie',auth, async (req,res)=>{
-  let name = req.body.moviename;
-  let genres = req.body.genres;
-  let ott = req.body.ott;
-  if(req.rawHeaders[13].replaceAll('http://localhost:3000/','') == 'moviegrid'){
-    let inputpage = req.query.page || 1;
-    let number = req.query.number || 12;
-    let sort = req.query.sort || 'name';
-    let page = ((parseInt(inputpage)-1)*number);
-    if(page<0){
-      res.render('404',{
-        layout : "extra"
-      })
-    }
-    else{
-      if(name == '' && genres == '' && ott == 'de'){
-      let row = await getAllPromise(`SELECT * FROM allmovies ORDER BY ${sort} LIMIT ${page},${number}`);
-      }
-      let row = await getAllPromise(`SELECT * FROM allmovies WHERE name LIKE '%${name}%' ORDER BY ${sort} LIMIT ${page},${number}`);
-      res.render('moviegrid',{
-        Profile : profile,
-        Logout : logout,
-        row: row,
-        page : inputpage,
-        number: number,
-        sor: sort
-      });
-    }
-  }
-  else{
-
-    
-  }
-
+app.post('/search',auth, async (req,res)=>{
+  let name = req.body.name;
+  let m = req.body.m;
+  console.log(name,m,req.body);
+  if(m=="movie"){res.redirect('/moviegrid?name=' + name);}
+  else{res.redirect('/celebrity?name=' + name);}
 });
 
 app.post('/logout',(req,res)=>{
