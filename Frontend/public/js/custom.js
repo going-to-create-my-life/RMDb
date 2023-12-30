@@ -1,18 +1,23 @@
 //preloading for page
-$(window).on('load', function() { // makes sure the whole site is loaded 
+$(window).on('load', function() { 
+	console.log("11111111111")// makes sure the whole site is loaded 
 	var status = $('#status');
 	var preloader = $('#preloader');
 	var body = $('body');
 	status.fadeOut(); // will first fade out the loading animation 
 	preloader.delay(0).fadeOut('fast'); // will fade out the white DIV that covers the website. 
 	body.delay(0).css({'overflow':'visible'});
+	console.log("2222222");
 	var vidDefer = document.getElementsByTagName('iframe');
 	$('.tabs #favoritelist').hide()
+	console.log("DONEEEEEEEE");
 	for (var i=0; i<vidDefer.length; i++) {
+		console.log("aaaaa");
 		if(vidDefer[i].getAttribute('data-src')) {
 			vidDefer[i].setAttribute('src',vidDefer[i].getAttribute('data-src'));
 		} 
 	}
+	console.log("333333");
 })
 $(function(){
 	'use strict';
