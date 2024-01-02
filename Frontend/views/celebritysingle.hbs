@@ -18,7 +18,7 @@
 		<div class="row ipad-width">
 			<div class="col-md-4 col-sm-12 col-xs-12">
 				<div class="mv-ceb">
-					<img src="{{img}}" alt="">
+					<img loading="lazy" src="{{img}}" alt="">
 				</div>
 			</div>
 			<div class="col-md-8 col-sm-12 col-xs-12">
@@ -52,14 +52,14 @@
 											<div class="mvsingle-item ov-item">
 												{{#each main}}
 												{{#gte "2" @key}}
-												<a class="img-lightbox"  data-fancybox-group="gallery" href="{{photo}}" style="width: 30%;" ><img src="{{photo}}" alt=""></a>
+												<a class="img-lightbox"  data-fancybox-group="gallery" href="{{photo}}" style="width: 30%;" ><img loading="lazy" src="{{photo}}" alt=""></a>
 												{{/gte}}
 												{{/each}}
 												{{#each main}}
                           						{{#gte "0" @key}}
 												<div class="vd-it">
-													<img class="vd-img" src="{{cover}}" alt="">
-													<a class="fancybox-media hvr-grow" href="{{video}}"><img src="images/uploads/play-vd.png" alt=""></a>
+													<img loading="lazy" class="vd-img" src="{{cover}}" alt="">
+													<a class="fancybox-media hvr-grow" href="{{video}}"><img loading="lazy" src="images/uploads/play-vd.png" alt=""></a>
 												</div>
 												 {{/gte}}
                         						 {{/each}}
@@ -73,7 +73,7 @@
 												{{#gte "5" @key}}		
 												<div class="cast-it">
 													<div class="cast-left cebleb-film">
-														<img style="max-width: 15%;" src="{{movieimg}}" alt="">
+														<img loading="lazy" style="max-width: 15%;" src="{{movieimg}}" alt="">
 														<div>
 															<a href="/movies?movie={{moviename}}">{{moviename}}</a>
 															{{!-- <p class="time">Logan</p> --}}
@@ -114,7 +114,7 @@
 						            			</p>
 						            		</div> --}}
 						            		<div class="ads">
-												<img src="images/uploads/ads1.png" alt="">
+												<img loading="lazy" src="images/uploads/ads1.png" alt="">
 											</div>
 						            	</div>
 						            </div>
@@ -145,8 +145,8 @@
 											{{#each main}}
 											<div class="vd-item">
 												<div class="vd-it">
-													<img class="vd-img" src="{{cover}}" alt="">
-													<a class="fancybox-media hvr-grow"  href="{{video}}"><img src="images/uploads/play-vd.png" alt=""></a>
+													<img loading="lazy" class="vd-img" src="{{cover}}" alt="">
+													<a class="fancybox-media hvr-grow"  href="{{video}}"><img loading="lazy" src="images/uploads/play-vd.png" alt=""></a>
 												</div>
 												<div class="vd-infor">
 													<h6> <a href="#">Trailer:  Watch New Scenes</a></h6>
@@ -160,7 +160,7 @@
 										</div>
 										<div class="mvsingle-item">
 											{{#each main}}
-											<a class="img-lightbox"  data-fancybox-group="gallery" href="{{photo}}" style="width: 30%;" ><img src="{{photo}}" alt=""></a>
+											<a class="img-lightbox"  data-fancybox-group="gallery" href="{{photo}}" style="width: 30%;" ><img loading="lazy" src="{{photo}}" alt=""></a>
 											{{/each}}
 										</div>
 						        	</div>
@@ -190,7 +190,7 @@
 										<div class="mvcast-item">									{{#each main}}	
 											<div class="cast-it">
 												<div class="cast-left cebleb-film">
-													<img style="max-width: 25%;" src="{{movieimg}}" alt="">
+													<img loading="lazy" style="max-width: 25%;" src="{{movieimg}}" alt="">
 													<div>
 														<a href="/movies?movie={{moviename}}">{{moviename}}</a>
 														{{!-- <p class="time">Logan</p> --}}
