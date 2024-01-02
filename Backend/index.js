@@ -4,7 +4,6 @@ const app = express();
 const bodyParser = require('body-parser');
 const exhbs = require('express-handlebars');
 const cookieParser = require("cookie-parser");
-const port = 3000;
 const auth = require('./auth.js');
 var helpers = require('handlebars-helpers')();
 // const gcookie = require('./cookie.js');
@@ -48,7 +47,6 @@ function getAllPromise(query, params) {
 
           if(err) {
             console.log(err);
-            res.redirect('/dashboard')
           }
 
           // "return" the result when the action finish
@@ -59,15 +57,26 @@ function getAllPromise(query, params) {
 
 app.use(cookieParser());
 // connect to db
-const db = new sqlite3.Database("/opt/render/project/src/Backend/index.db", sqlite3.OPEN_READWRITE,(err)=>{
+const db = new sqlite3.Database("/home/sourav/Documents/RMdb/Backend/index.db", sqlite3.OPEN_READWRITE,(err)=>{
     if(err) return console.error(err.message);
 });
 
 
 const authd = async (req,res,next) =>{
 try {  console.log(error);
-console.log("ENTER");
-console.log(req.cookies.jwt);
+  // let data = await getAllPromise(`SELECT * FROM users WHERE email="souravsingla335@gmail.com"`);
+  // let b = await getAllPromise(`SELECT * FROM allmovies`);
+  // let a = {};
+  // let n=0;
+  // for(let i=6; i<Object.keys(data[0]).length;i++){
+  //   if(Object.values(data[0])[i]=="YES"){a[n++]=Object.keys(data[0])[i]}
+  // }
+  // for(let i=0;i<n;i++){
+  //     for(let j=0;j<b.length;j++){
+  //       if(a[i]==b[j].name.replaceAll('-','').replaceAll(':','').replaceAll('.','').replaceAll(' ','')){a[i]=b[j];}
+  //     }
+  // }
+  let inputpage = req.query.page || 1;
   if(!(req.cookies.jwt)){
     //for google oauth
     var myjwt = jwt.sign({
@@ -80,7 +89,21 @@ console.log(req.cookies.jwt);
     sql = `SELECT * FROM users WHERE email= ? `;
     let row = await getAllPromise(sql,[decoded.email]);
     row = row[0];
-      console.log(row);
+    console.log(row);
+      let b = await getAllPromise(`SELECT * FROM allmovies`);
+      let a = {};
+      let n=0;
+      for(let i=6; i<Object.keys(row).length;i++){
+        if(Object.values(row)[i]=="YES"){a[n++]=Object.keys(row)[i]}
+      }
+      let all= {};
+      n = 0;
+      for(let i=(parseInt(inputpage)-1)*5;i<(parseInt(inputpage))*5;i++){
+          for(let j=0;j<b.length;j++){
+            if(a[i]==b[j].name.replaceAll('-','').replaceAll(':','').replaceAll('.','').replaceAll(' ','')){all[n++]=b[j];}
+          }
+      }
+      console.log(all);
       return res.render('userprofile',{
         Profile : profile,
         Logout : logout,
@@ -90,7 +113,9 @@ console.log(req.cookies.jwt);
         Country: row.Country,
         State: row.State,
         OldPass : "google",
-        erro : error
+        erro : error,
+        fav: all,
+        page : inputpage
       });
   }
 
@@ -102,7 +127,21 @@ console.log(req.cookies.jwt);
     sql = `SELECT * FROM users WHERE email= ? `;
     let row = await getAllPromise(sql,[decoded.email]);
     row = row[0];
-      console.log(row);
+    console.log(row);
+      let b = await getAllPromise(`SELECT * FROM allmovies`);
+      let a = {};
+      let n=0;
+      for(let i=6; i<Object.keys(row).length;i++){
+        if(Object.values(row)[i]=="YES"){a[n++]=Object.keys(row)[i]}
+      }
+      let all = {};
+      n = 0;
+      for(let i=(parseInt(inputpage)-1)*5;i<(parseInt(inputpage))*5;i++){
+          for(let j=0;j<b.length;j++){
+            if(a[i]==b[j].name.replaceAll('-','').replaceAll(':','').replaceAll('.','').replaceAll(' ','')){all[n++]=b[j];}
+          }
+      }
+      console.log(all);
       return res.render('userprofile',{
         Profile : profile,
         Logout : logout,
@@ -112,7 +151,9 @@ console.log(req.cookies.jwt);
         Country: row.Country,
         State: row.State,
         OldPass : "google",
-        erro : error
+        erro : error,
+        fav: all,
+        page : inputpage
       });
   }
   error="";
@@ -237,21 +278,27 @@ app.all('/movielist',auth, async (req, res) => {
 });
 
 app.get('/movies',auth, async (req, res) => {
-  console.log(req.query);
-  let row = await getAllPromise('SELECT * FROM allmovies WHERE name = ? ',[req.query.movie.replaceAll('%20',' ')]);
   let inputpage = req.query.page || 1;
   let page = ((parseInt(inputpage)-1)*4);
-  if(req.url.replaceAll('/movies','').replaceAll('?','').replaceAll('%20','')=='' || row[0] == undefined || page<0){
+  if(req.url.replaceAll('/movies','').replaceAll('?','').replaceAll('%20','')==''|| page<0 || req.query.movie==''){
     res.render('404',{
-    layout : "extra"
+      layout : "extra"
     })
   }
   else{
+    let row = await getAllPromise('SELECT * FROM allmovies WHERE name = ? ',[req.query.movie.replaceAll('%20',' ')]);
+    if(row[0]==undefined){res.render('404',{
+      layout : "extra"
+    })}
+    else{
+    let fav = await getAllPromise(`SELECT ${req.query.movie.replaceAll(' ','').replaceAll('-','').replaceAll(':','').replaceAll('.','')} FROM users WHERE email="${jwt.verify(req.cookies.jwt,"RMDb").email}"`)
+    if(fav==undefined){fav="NO"}
+    else{ fav = Object.values(fav[0])[0];}
+    console.log(fav);
     let review = await getAllPromise(`SELECT * FROM ${req.query.movie.replaceAll(' ','').replaceAll('-','').replaceAll(':','').replaceAll('.','') + "reviews"} LIMIT ${page},4 `,[]);
     let crew = await getAllPromise(`SELECT * FROM ${req.query.movie.replaceAll(' ','').replaceAll('-','').replaceAll(':','').replaceAll('.','') + "crew"}`,[]);
     let photos = await getAllPromise(`SELECT Jawanp FROM photos`,[]);
     let videos = await getAllPromise(`SELECT Jawanv FROM videos`,[]);
-    console.log(row);
   row = row[0];
   res.render('moviesingle',{
     Profile : profile,
@@ -272,8 +319,9 @@ app.get('/movies',auth, async (req, res) => {
     crew: crew,
     photos: photos,
     videos: videos,
-    page: inputpage
-  })
+    page: inputpage,
+    fav : fav
+  })}
   }
 });
 
@@ -321,7 +369,6 @@ app.get('/celebrities',auth,async (req, res) => {
   }
   else{
     let row = await getAllPromise('SELECT * FROM allcelebrities WHERE name = ? ',[req.query.celebrity.replaceAll('%20',' ')]);
-    console.log(row, row[0]);
     if(row[0]==undefined){res.render('404',{
       layout : "extra"
     })}
@@ -454,12 +501,23 @@ app.post('/search',auth, async (req,res)=>{
   else{res.redirect('/celebrity?name=' + name);}
 });
 
+app.get('/fav',auth,async (req,res)=>{
+ let name = req.headers.referer.replaceAll('http://localhost:5000/movies?movie=','').replaceAll('https://rmdb-y1yl.onrender.com/movies?movie=','').replaceAll('%20','').replaceAll(':','').replaceAll('-','').replaceAll('.','');
+ let decoded =  jwt.verify(req.cookies.jwt,"RMDb");
+  let row = await getAllPromise(`SELECT ${name} FROM users WHERE email = "${decoded.email}"`);
+  console.log(row);
+  if(row==undefined){ await getAllPromise(`ALTER TABLE users ADD COLUMN ${name}`); console.log("111");await getAllPromise(`UPDATE users SET ${name}="YES" WHERE email="${decoded.email}"`)}
+  else if(Object.values(row[0])[0]=="NO"){await getAllPromise(`UPDATE users SET ${name}="YES" WHERE email="${decoded.email}"`)}
+  else if(Object.values(row[0])[0]=="YES"){await getAllPromise(`UPDATE users SET ${name}="NO" WHERE email="${decoded.email}"`)};
+  console.log("DONE");
+  res.redirect(req.headers.referer);
+});
+
 app.post('/logout',(req,res)=>{
   res.clearCookie("jwt");
   res.redirect('/');
 });
 
 
-app.listen(process.env.PORT || port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.listen(process.env.PORT || 5000, () => {
 })
