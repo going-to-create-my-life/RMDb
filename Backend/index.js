@@ -57,7 +57,7 @@ function getAllPromise(query, params) {
 
 app.use(cookieParser());
 // connect to db
-const db = new sqlite3.Database("/home/sourav/Documents/RMdb/Backend/index.db", sqlite3.OPEN_READWRITE,(err)=>{
+const db = new sqlite3.Database("/opt/render/project/src/Backend/index.db", sqlite3.OPEN_READWRITE,(err)=>{
     if(err) return console.error(err.message);
 });
 
